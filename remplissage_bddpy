@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr 26 09:18:37 2017
+
+@author: znsc5162
+"""
+
+import machine3
+#print(M1)
+import sqlite3
+
+#creation de la base de donnée :
+    
+db_loc = sqlite3.connect('coocurence.db')
+cursor = db_loc.cursor()
+
+#cretation de la table mot et categorie:
+#cursor.execute('''DROP TABLE mot_cat;''')
+#cursor.execute('''CREATE TABLE mot_cat(
+          # mot_cat varchar(40), occurrence int(11));''')
+
+db_loc.commit()
+#recuperation des noeuds du texte lemmatisés:
+mots = machine3.count_noeuds("etiquete1.txt")
+
+for val in mots.keys():
+   t=mots[val]
+   mc=val[0]+':'+val[1]
+   cursor.execute('''INSERT INTO mot_cat VALUES (?,?);''', (mc,t)) 
+db_loc.commit()
+
+cursor.execute('''SELECT * FROM mot_cat;''')
+first_mot = cursor.fetchone() # récupère le premier élève
+print(first_mot)
+
+
+
+cursor.execute('''DROP TABLE cooccurrence;''')
+cursor.execute('''CREATE TABLE cooccurrence(mot_cat1 varchar(40) ,
+ mot_cat2 varchar(40) ,cooccurrence_plus int(40), cooccurrence_moins int(40)) ;''')
+
+db_loc.commit()
+
+noeuds=machine3.noeuds_text("etiquete1.txt")
+
+print(len(noeuds))
+i=0
+for parc1 in noeuds:
+    i=i+1
+    print(i)
+    mc1=parc1[0]+':'+parc1[1]
+    for parc2 in noeuds:
+        mc2 = parc2[0]+':'+parc2[1]
+        t1=machine3.phrase_to_matrice([parc1,parc2])[0][1]
+        t2=machine3.phrase_to_matrice([parc1,parc2])[1][0]
+        cursor.execute('''INSERT INTO cooccurrence VALUES (?,?,?,?);''', (mc1,mc2,t1,t2)) 
+        db_loc.commit()
+
+
+db_loc.close()
