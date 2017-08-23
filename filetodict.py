@@ -349,10 +349,6 @@ print(M)
 
 
 
-#signaler a edmond qu'ici la partie d'analyse et de comptage sont confondues c'est a partir de la phrase qu'on réalise les decomptes 
-#c'est plus economique et contextuel 
-
-#penser à stocker les coocurences ici vraiment 
 
 #print("commentaire important: ici les couples qui ne match (les litigieux) ne valent en fait pas la peine d'être lemmatisés")
 
