@@ -7,7 +7,6 @@ int main()
 	char buffer[100];
 	while(fgets(buffer,100,stdin)){
 		i=atoi(buffer);
-		//fwrite(&i,sizeof(int),1,stdout);
 		fwrite(&i,sizeof(int),1,stdout);
 	}
 	
